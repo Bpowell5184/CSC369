@@ -22,12 +22,41 @@ def analyzePlace(startDate, startTime, endDate, endTime):
         # Create two dictionaries, color and coord respectively
         color_dict = {}
         coord_dict = {}
-        # Process current line
-        curLine = file.readline()
-        (curDate, curTime, color, coord) = processLine(curLine)
-        # If line is past end time, end read
-        
-        # Change color and coord counts
+        # Process file line by line
+        for line in file:
+            # Process single line
+            (curDate, curTime, color, coord) = processLine(line)
+
+            # Check if the current line is past the end time
+            if (curDate > endDate) or (curDate == endDate and curTime > endTime):
+                break
+
+            # Check if the current line is within the start time range
+            if (curDate > startDate) or (curDate == startDate and curTime >= startTime):
+                # Increment count for color
+                if color in color_dict:
+                    # Increment existing color
+                    color_dict[color] += 1
+                else:
+                    # Add color
+                    color_dict[color] = 1
+
+                # Increment counts for coordinate
+                if coord in coord_dict:
+                    # Increment exisiting coordinate
+                    coord_dict[coord] += 1
+                else:
+                    # Add coordinate
+                    coord_dict[coord] = 1
+    
+    # Get most popular color and coordinate
+    popular_color = max(color_dict.items(), key=lambda x: x[1], default=(None, 0))
+    popular_coordinate = max(coord_dict.items(), key=lambda x: x[1], default=(None, 0))
+
+    # Print results
+    print(f"Most Popular Color: {popular_color[0]} ({popular_color[1]} occurrences)")
+    print(f"Most Popular Coordinate: {popular_coordinate[0]} ({popular_coordinate[1]} occurrences)")
+
         
 
 # Format: YYYY-MM-DD H
