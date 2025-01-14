@@ -1,6 +1,9 @@
 import sys
 import re
-# Get time from command line
+
+
+def analyzePlace(startDate, startTime, endDate, endTime):
+    print("analyzing beep boop")
 
 # Format: YYYY-MM-DD H
 # Ex: 2004-09-27 12
@@ -13,13 +16,13 @@ else:
     user_input = ' '.join(sys.argv[1:5])
     # print("User input: ", user_input)
 
-    if re.match(YMD, user_input):
-        startDate = ' '.join(sys.argv[1:3])
-        endDate = ' '.join(sys.argv[3:5])
-        # print(f"Start date is {startDate}, end date is {endDate}")
+    if re.match(YMD, user_input) and sys.argv[2] < sys.argv[4]:
+        startDate = ' '.join(sys.argv[1:2])
+        startTime = ' '.join(sys.argv[2:3])
+        endDate = ' '.join(sys.argv[3:4])
+        endTime = ' '.join(sys.argv[4:5])
+        print(f"Start date/time is {startDate} {startTime}, end date/time is {endDate} {endTime}")
+        analyzePlace(startDate, startTime, endDate, endTime)
     else:
         print("Invalid format: Start Date (YYYY-MM-DD H) End Date (YYYY-MM-DD H)")
 
-
-def analyzePlace(startTime, endTime):
-    print("analyzing beep boop")
