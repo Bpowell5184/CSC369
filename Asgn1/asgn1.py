@@ -1,5 +1,6 @@
 import sys
 import re
+import time
 
 def processLine(curLine):
     # Split line into list
@@ -10,12 +11,17 @@ def processLine(curLine):
     color = columns[2]
     # Join rest together to form coordinate
     coordinate = ''.join(info[3:]).replace("\"", '').strip()
+    coordinate = int(coordinate.replace(',', ''))
     # Return relevant info
     return date, time[0:2], color, coordinate
 
 
 def analyzePlace(startDate, startTime, endDate, endTime):
     file_path = "../2022_place_canvas_history.csv"
+
+    # Start timing
+    start_timer = time.perf_counter_ns()
+
     with open(file_path, "r") as file:
         # Skip the header
         next(file)
@@ -33,6 +39,7 @@ def analyzePlace(startDate, startTime, endDate, endTime):
 
             # Check if the current line is within the start time range
             if (curDate > startDate) or (curDate == startDate and curTime >= startTime):
+                #print(f"PROCESSING: DATE: {curDate}, TIME: {curTime}, COLOR: {color}, COORDINATE: {coord}")
                 # Increment count for color
                 if color in color_dict:
                     # Increment existing color
@@ -49,13 +56,28 @@ def analyzePlace(startDate, startTime, endDate, endTime):
                     # Add coordinate
                     coord_dict[coord] = 1
     
+    print(coord_dict)
+    
     # Get most popular color and coordinate
     popular_color = max(color_dict.items(), key=lambda x: x[1], default=(None, 0))
     popular_coordinate = max(coord_dict.items(), key=lambda x: x[1], default=(None, 0))
 
+    # End timer
+    end_timer = time.perf_counter_ns()
+
+    # Calculate elapsed time
+    elapsed_time_ns = end_timer - start_timer
+    elapsed_time_ms = elapsed_time_ns / 1_000_000
+
     # Print results
+    print(f"Timeframe: {startDate} {startTime} to {endDate} {endTime}")
+    print(f"Elapsed time (ms) {elapsed_time_ms}")
     print(f"Most Popular Color: {popular_color[0]} ({popular_color[1]} occurrences)")
     print(f"Most Popular Coordinate: {popular_coordinate[0]} ({popular_coordinate[1]} occurrences)")
+
+    coords_with_979 = [key for key, value in coord_dict.items() if value == 979]
+    print(f"Coordinates with 979 occurrences: {coords_with_979}")
+
 
         
 
