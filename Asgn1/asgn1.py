@@ -1,9 +1,34 @@
 import sys
 import re
 
+def processLine(curLine):
+    # Split line into list
+    info = curLine.strip().split(',')
+    # Get everything but coords (finnicky commas)
+    columns = info[:3]
+    date, time, loc = columns[0].strip().split(' ')
+    color = columns[2]
+    # Join rest together to form coordinate
+    coordinate = ''.join(info[3:]).replace("\"", '').strip()
+    # Return relevant info
+    return date, time[0:2], color, coordinate
+
 
 def analyzePlace(startDate, startTime, endDate, endTime):
-    print("analyzing beep boop")
+    file_path = "../2022_place_canvas_history.csv"
+    with open(file_path, "r") as file:
+        # Skip the header
+        next(file)
+        # Create two dictionaries, color and coord respectively
+        color_dict = {}
+        coord_dict = {}
+        # Process current line
+        curLine = file.readline()
+        (curDate, curTime, color, coord) = processLine(curLine)
+        # If line is past end time, end read
+        
+        # Change color and coord counts
+        
 
 # Format: YYYY-MM-DD H
 # Ex: 2004-09-27 12
@@ -21,7 +46,6 @@ else:
         startTime = ' '.join(sys.argv[2:3])
         endDate = ' '.join(sys.argv[3:4])
         endTime = ' '.join(sys.argv[4:5])
-        print(f"Start date/time is {startDate} {startTime}, end date/time is {endDate} {endTime}")
         analyzePlace(startDate, startTime, endDate, endTime)
     else:
         print("Invalid format: Start Date (YYYY-MM-DD H) End Date (YYYY-MM-DD H)")
