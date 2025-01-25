@@ -1,12 +1,10 @@
 import duckdb
-import sys
-import re 
 import time
 
 # hardcode start/end dates/times
-start_date = "2022-04-03"
+start_date = "2022-04-02"
 start_hour = "04"
-end_date = "2022-04-03"
+end_date = "2022-04-02"
 end_hour = "10"
 
 # Convert to valid format
